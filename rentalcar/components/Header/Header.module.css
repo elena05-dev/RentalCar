@@ -1,0 +1,49 @@
+.header {
+    width: 100%;
+    background: #f2f4f7;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.container {
+    max-width: 1440px;
+    margin: 0 auto;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 120px;
+}
+
+/* Лого */
+.headerLogo {
+    display: block;
+    height: auto;
+}
+
+/* Навигация */
+.navlink {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+}
+
+.navlink a {
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 500;
+    color: #1f2937;
+    transition: color 0.2s ease, opacity 0.2s ease;
+}
+
+.homeLink {
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    color: #101828;
+}
+
+.homeLink:hover {
+    color: #0B44CD;
+}
