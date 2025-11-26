@@ -47,3 +47,10 @@ export interface Filters {
   minMileage?: number; // вместо mileageFrom
   maxMileage?: number; // вместо mileageTo
 }
+
+export interface VehiclesApiResponse {
+  cars: VehicleApi[];
+  totalCars: number;
+  page: number;
+  totalPages: number;
+}

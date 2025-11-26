@@ -1,15 +1,8 @@
 // lib/vehiclesApi.ts
 import axios from "axios";
-import { Vehicle, VehicleApi } from "../types/vehicle";
+import { Vehicle, VehicleApi, VehiclesApiResponse } from "../types/vehicle";
 
-const API_BASE = "https://car-rental-api.goit.global/api";
-
-export interface VehiclesApiResponse {
-  cars: VehicleApi[];
-  totalCars: number;
-  page: number;
-  totalPages: number;
-}
+const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
 
 export async function fetchVehicles(params?: {
   page?: number;
@@ -23,8 +16,7 @@ export async function fetchVehicles(params?: {
     params,
   });
 
-  // Преобразуем для фронтенда
-  const cars: Vehicle[] = data.cars.map((c) => ({
+  const cars: Vehicle[] = data.cars.map((c: VehicleApi) => ({
     id: c.id,
     brand: c.brand,
     model: c.model,
