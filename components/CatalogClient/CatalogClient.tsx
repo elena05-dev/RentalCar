@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useStore } from "../../store/useStore";
 import VehicleCard from "../VehicleCard/VehicleCard";
 import Filters from "../Filters/Filters";
