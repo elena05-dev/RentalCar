@@ -14,10 +14,20 @@
     padding: 0 120px;
 }
 
-/* Лого */
 .headerLogo {
-    display: block;
-    height: auto;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.logoPart1 {
+    color: #ff6b6b;
+    font-weight: bold;
+}
+
+.logoPart2 {
+    color: #1e90ff;
+    font-weight: normal;
 }
 
 /* Навигация */

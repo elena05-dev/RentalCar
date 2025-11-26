@@ -8,15 +8,11 @@ export default function Header() {
     <header className={css.header}>
       <div className={css.container}>
         <Link href="/">
-          <Image
-            src="/RentalCar_logo.svg"
-            alt="RentalCar Logo"
-            width={102}
-            height={16}
-            className={css.headerLogo}
-          />
+          <h1 className={css.headerLogo}>
+            <span className={css.logoPart1}>Rental</span>
+            <span className={css.logoPart2}>Car</span>
+          </h1>
         </Link>
-
         <nav className={css.navlink}>
           <Link href="/" className={css.homeLink}>
             Home
