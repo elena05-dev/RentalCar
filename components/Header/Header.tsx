@@ -1,7 +1,6 @@
 "use client";
 import Link from "next/link";
 import css from "../Header/Header.module.css";
-import Image from "next/image";
 
 export default function Header() {
   return (
