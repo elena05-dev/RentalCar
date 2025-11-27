@@ -54,10 +54,9 @@ export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
       if (minMileage) params.minMileage = minMileage;
       if (maxMileage) params.maxMileage = maxMileage;
 
-      const res = await axios.get<CarsResponse>(
-        "https://car-rental-api.goit.global/cars",
-        { params }
-      );
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/cars`, {
+        params,
+      });
 
       if (pageNum === 1) {
         setVehicles(res.data.cars);

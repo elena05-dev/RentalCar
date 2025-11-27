@@ -1,4 +1,3 @@
-// store/useStore.ts
 "use client";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
@@ -37,6 +36,7 @@ type State = {
   clearVehicles: () => void;
   addFavorite: (id: string) => void;
   removeFavorite: (id: string) => void;
+  toggleFavorite: (id: string) => void; // добавляем toggle
   setFilters: (f: Partial<Filters>) => void;
 };
 
@@ -55,6 +55,12 @@ export const useStore = create<State>()(
       removeFavorite: (id) =>
         set((state) => ({
           favorites: state.favorites.filter((f) => f !== id),
+        })),
+      toggleFavorite: (id) =>
+        set((state) => ({
+          favorites: state.favorites.includes(id)
+            ? state.favorites.filter((f) => f !== id)
+            : [...state.favorites, id],
         })),
       setFilters: (f) =>
         set((state) => ({ filters: { ...state.filters, ...f } })),

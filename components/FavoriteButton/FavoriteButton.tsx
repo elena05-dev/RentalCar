@@ -1,25 +1,73 @@
 "use client";
-import { useStore } from "../../store/useStore";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
-type FavoriteButtonProps = {
+export type Vehicle = {
   id: string;
-  isFavorite?: boolean;
+  year: number;
+  brand: string;
+  model: string;
+  type: string;
+  img: string;
+  description: string;
+  fuelConsumption: string;
+  engineSize: string;
+  accessories: string[];
+  functionalities: string[];
+  rentalPrice: string;
+  rentalCompany: string;
+  address: string;
+  rentalConditions: string[];
+  mileage: number;
 };
 
-export default function FavoriteButton({
-  id,
-  isFavorite,
-}: FavoriteButtonProps) {
-  const { toggleFavorite } = useStore((s) => ({
-    toggleFavorite: s.toggleFavorite,
-  }));
+type Filters = {
+  brand?: string;
+  rentalPrice?: string;
+  minMileage?: string;
+  maxMileage?: string;
+};
 
-  return (
-    <button
-      className={`favorite-btn ${isFavorite ? "active" : ""}`}
-      onClick={() => toggleFavorite(id)}
-    >
-      ❤️
-    </button>
-  );
-}
+type State = {
+  vehicles: Vehicle[];
+  favorites: string[]; // массив id
+  filters: Filters;
+  setVehicles: (v: Vehicle[]) => void;
+  clearVehicles: () => void;
+  addFavorite: (id: string) => void;
+  removeFavorite: (id: string) => void;
+  toggleFavorite: (id: string) => void; // добавляем toggle
+  setFilters: (f: Partial<Filters>) => void;
+};
+
+export const useStore = create<State>()(
+  persist(
+    (set) => ({
+      vehicles: [],
+      favorites: [],
+      filters: {},
+      setVehicles: (v) => set({ vehicles: v }),
+      clearVehicles: () => set({ vehicles: [] }),
+      addFavorite: (id) =>
+        set((state) => ({
+          favorites: Array.from(new Set([...state.favorites, id])),
+        })),
+      removeFavorite: (id) =>
+        set((state) => ({
+          favorites: state.favorites.filter((f) => f !== id),
+        })),
+      toggleFavorite: (id) =>
+        set((state) => ({
+          favorites: state.favorites.includes(id)
+            ? state.favorites.filter((f) => f !== id)
+            : [...state.favorites, id],
+        })),
+      setFilters: (f) =>
+        set((state) => ({ filters: { ...state.filters, ...f } })),
+    }),
+    {
+      name: "rentalcar-storage",
+      partialize: (state) => ({ favorites: state.favorites }),
+    }
+  )
+);
