@@ -16,3 +16,10 @@ export interface Vehicle {
   rentalConditions: string[];
   mileage: number;
 }
+
+export type Filters = {
+  brand?: string;
+  rentalPrice?: string;
+  minMileage?: string;
+  maxMileage?: string;
+};
