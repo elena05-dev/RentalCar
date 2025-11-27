@@ -1,57 +1,67 @@
 // store/useStore.ts
+"use client";
 import { create } from "zustand";
-import { Vehicle, Filters } from "../types/vehicle";
+import { persist } from "zustand/middleware";
 
-export interface StoreState {
+export type Vehicle = {
+  id: string;
+  year: number;
+  brand: string;
+  model: string;
+  type: string;
+  img: string;
+  description: string;
+  fuelConsumption: string;
+  engineSize: string;
+  accessories: string[];
+  functionalities: string[];
+  rentalPrice: string;
+  rentalCompany: string;
+  address: string;
+  rentalConditions: string[];
+  mileage: number;
+};
+
+type Filters = {
+  brand?: string;
+  rentalPrice?: string;
+  minMileage?: string;
+  maxMileage?: string;
+};
+
+type State = {
   vehicles: Vehicle[];
-  favorites: string[];
-  page: number;
-  pageSize: number;
+  favorites: string[]; // массив id
   filters: Filters;
-  loading: boolean;
+  setVehicles: (v: Vehicle[]) => void;
+  clearVehicles: () => void;
+  addFavorite: (id: string) => void;
+  removeFavorite: (id: string) => void;
+  setFilters: (f: Partial<Filters>) => void;
+};
 
-  // Методы для управления состоянием
-  setVehicles: (vehicles: Vehicle[], reset?: boolean) => void;
-  appendVehicles: (vehicles: Vehicle[]) => void;
-  setPage: (page: number) => void;
-  setFilters: (filters: Filters) => void;
-  setLoading: (loading: boolean) => void;
-  toggleFavorite: (id: string) => void;
-}
-
-export const useStore = create<StoreState>((set) => ({
-  vehicles: [],
-  favorites: [],
-  page: 1,
-  pageSize: 10,
-  filters: {},
-  loading: false,
-
-  setVehicles: (vehicles, reset = false) =>
-    set((state) => ({
-      vehicles: reset ? vehicles : [...state.vehicles, ...vehicles],
-    })),
-
-  appendVehicles: (vehicles) =>
-    set((state) => ({
-      vehicles: [...state.vehicles, ...vehicles],
-    })),
-
-  setPage: (page) => set({ page }),
-
-  setFilters: (filters) =>
-    set({
-      filters,
-      page: 1,
+export const useStore = create<State>()(
+  persist(
+    (set) => ({
       vehicles: [],
+      favorites: [],
+      filters: {},
+      setVehicles: (v) => set({ vehicles: v }),
+      clearVehicles: () => set({ vehicles: [] }),
+      addFavorite: (id) =>
+        set((state) => ({
+          favorites: Array.from(new Set([...state.favorites, id])),
+        })),
+      removeFavorite: (id) =>
+        set((state) => ({
+          favorites: state.favorites.filter((f) => f !== id),
+        })),
+      setFilters: (f) =>
+        set((state) => ({ filters: { ...state.filters, ...f } })),
     }),
-
-  setLoading: (loading) => set({ loading }),
-
-  toggleFavorite: (id) =>
-    set((state) => ({
-      favorites: state.favorites.includes(id)
-        ? state.favorites.filter((f) => f !== id)
-        : [...state.favorites, id],
-    })),
-}));
+    {
+      name: "rentalcar-storage",
+      partialize: (state) => ({ favorites: state.favorites }),
+    }
+  )
+);

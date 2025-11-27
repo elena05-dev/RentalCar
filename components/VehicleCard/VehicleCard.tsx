@@ -1,42 +1,32 @@
-"use client";
-
-import Link from "next/link";
 import Image from "next/image";
-import { Vehicle } from "../../types/vehicle";
-import { formatMileage } from "../../lib/format";
-import FavoriteButton from "../FavoriteButton/FavoriteButton";
+import { Vehicle } from "../../store/useStore";
 
-type VehicleCardProps = {
+interface VehicleCardProps {
   v: Vehicle;
-  isFavorite?: boolean;
-};
+}
 
-export default function VehicleCard({ v, isFavorite }: VehicleCardProps) {
+export default function VehicleCard({ v }: VehicleCardProps) {
+  const formatMileage = (mileage: number) =>
+    mileage.toLocaleString("ru-RU") + " km";
+
   return (
-    <article className="card">
-      <div className="image-container">
-        <Image
-          src={v.images?.[0] ?? "/placeholder.png"}
-          alt={`${v.brand} ${v.model}`}
-          width={400}
-          height={300}
-          className="object-cover w-full h-full"
-          priority={false}
-        />
-      </div>
-      <div className="body">
-        <h3>
-          {v.brand} {v.model} {v.year ? `(${v.year})` : ""}
-        </h3>
-        <p>Mileage: {formatMileage(v.mileage)}</p>
-        <p>Price: {v.rentalPrice} $/day</p>
-        <div className="actions">
-          <Link href={`/catalog/${v.id}`}>
-            <button>Read more</button>
-          </Link>
-          <FavoriteButton id={v.id} isFavorite={isFavorite} />
-        </div>
-      </div>
-    </article>
+    <div
+      style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "8px" }}
+    >
+      <Image
+        src={v.img}
+        alt={`${v.brand} ${v.model}`}
+        width={400} // можно подбирать под макет
+        height={250} // пропорционально
+        style={{ borderRadius: "8px" }}
+        priority={true} // если важно для LCP
+      />
+      <h3>
+        {v.brand} {v.model} ({v.year})
+      </h3>
+      <p>{v.description}</p>
+      <p>Цена: ${v.rentalPrice}/день</p>
+      <p>Пробег: {formatMileage(v.mileage)}</p>
+    </div>
   );
 }

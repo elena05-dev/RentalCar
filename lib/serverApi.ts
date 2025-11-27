@@ -1,8 +1,7 @@
 // lib/vehiclesApi.ts
-import axios from "axios";
-import { Vehicle, VehicleApi, VehiclesApiResponse } from "../types/vehicle";
 
-const API_BASE = process.env.NEXT_PUBLIC_API_BASE;
+import { nextServer } from "./api";
+import { Vehicle, VehicleApi, VehiclesApiResponse } from "../types/vehicle";
 
 export async function fetchVehicles(params?: {
   page?: number;
@@ -12,7 +11,7 @@ export async function fetchVehicles(params?: {
   minMileage?: number;
   maxMileage?: number;
 }) {
-  const { data } = await axios.get<VehiclesApiResponse>(`${API_BASE}/cars`, {
+  const { data } = await nextServer.get<VehiclesApiResponse>(`/cars`, {
     params,
   });
 
@@ -44,7 +43,7 @@ export async function fetchVehicles(params?: {
 }
 
 export async function fetchVehicleById(id: string) {
-  const { data } = await axios.get<VehicleApi>(`${API_BASE}/cars/${id}`);
+  const { data } = await nextServer.get<VehicleApi>(`/cars/${id}`);
 
   const car: Vehicle = {
     id: data.id,

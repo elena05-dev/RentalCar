@@ -1,82 +1,176 @@
+// components/CatalogClient/CatalogClient.tsx
 "use client";
 
-import { useEffect } from "react";
-import { useStore } from "../../store/useStore";
+import { useState } from "react";
+import axios from "axios";
+import { Vehicle, useStore } from "../../store/useStore";
 import VehicleCard from "../VehicleCard/VehicleCard";
-import Filters from "../Filters/Filters";
-import { fetchVehicles } from "../../lib/vehiclesApi";
-import css from "./CatalogClient.module.css";
+import { useRouter } from "next/navigation";
 
-export default function CatalogClient() {
-  const {
-    vehicles,
-    favorites,
-    page,
-    pageSize,
-    filters,
-    loading,
-    setVehicles,
-    setPage,
-    setLoading,
-  } = useStore();
+interface CatalogClientProps {
+  initialVehicles: Vehicle[];
+}
 
-  useEffect(() => {
-    let cancelled = false;
+interface VehicleQueryParams {
+  page: number;
+  limit: number;
+  brand?: string;
+  rentalPrice?: string;
+  minMileage?: string;
+  maxMileage?: string;
+}
 
-    async function loadVehicles() {
-      setLoading(true);
+interface CarsResponse {
+  cars: Vehicle[];
+  totalCars: number;
+  page: number;
+  totalPages: number;
+}
 
-      try {
-        // fetchVehicles возвращает { cars: Vehicle[], totalCars, page, totalPages }
-        const data = await fetchVehicles({
-          page,
-          limit: pageSize,
-          brand: filters.brand,
-          rentalPrice: filters.rentalPrice,
-          minMileage: filters.minMileage,
-          maxMileage: filters.maxMileage,
-        });
+export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
+  const router = useRouter();
+  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [brandFilter, setBrandFilter] = useState("");
+  const [priceFilter, setPriceFilter] = useState("");
+  const [minMileage, setMinMileage] = useState("");
+  const [maxMileage, setMaxMileage] = useState("");
 
-        if (cancelled) return;
+  const { favorites, addFavorite, removeFavorite } = useStore((s) => ({
+    favorites: s.favorites,
+    addFavorite: s.addFavorite,
+    removeFavorite: s.removeFavorite,
+  }));
 
-        // данные уже Vehicle[], преобразования не нужны
-        if (page === 1) setVehicles(data.cars, true);
-        // сброс старых данных на первой странице
-        else setVehicles(data.cars); // добавление новых данных при пагинации
-      } catch (err) {
-        console.error("Error loading vehicles:", err);
-      } finally {
-        setLoading(false);
+  // Функция для fetch с backend с фильтрами и пагинацией
+  const fetchVehicles = async (pageNum = 1) => {
+    setLoading(true);
+    try {
+      const params: VehicleQueryParams = { page: pageNum, limit: 10 };
+      if (brandFilter) params.brand = brandFilter;
+      if (priceFilter) params.rentalPrice = priceFilter;
+      if (minMileage) params.minMileage = minMileage;
+      if (maxMileage) params.maxMileage = maxMileage;
+
+      const res = await axios.get<CarsResponse>(
+        "https://car-rental-api.goit.global/cars",
+        { params }
+      );
+
+      if (pageNum === 1) {
+        setVehicles(res.data.cars);
+      } else {
+        setVehicles((prev) => [...prev, ...res.data.cars]);
       }
+      setPage(res.data.page);
+      setTotalPages(res.data.totalPages);
+    } catch (err) {
+      console.error(err);
+      alert("Ошибка загрузки данных");
+    } finally {
+      setLoading(false);
     }
+  };
 
-    loadVehicles();
+  // Применяем фильтры
+  const handleFilterSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    fetchVehicles(1);
+  };
 
-    return () => {
-      cancelled = true;
-    };
-  }, [page, pageSize, filters, setVehicles, setLoading]);
+  // Load More
+  const handleLoadMore = () => {
+    fetchVehicles(page + 1);
+  };
 
-  const handleLoadMore = () => setPage(page + 1);
+  // Чистка фильтров
+  const clearFilters = () => {
+    setBrandFilter("");
+    setPriceFilter("");
+    setMinMileage("");
+    setMaxMileage("");
+    fetchVehicles(1);
+  };
 
   return (
-    <main className={css.main}>
-      <h1 className={css.title}>Catalog</h1>
-      <Filters />
+    <div>
+      <h2>Каталог автомобилей</h2>
 
-      <section className={css.grid}>
+      {/* Фильтры */}
+      <form onSubmit={handleFilterSubmit} style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Бренд"
+          value={brandFilter}
+          onChange={(e) => setBrandFilter(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Цена"
+          value={priceFilter}
+          onChange={(e) => setPriceFilter(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Мин. пробег"
+          value={minMileage}
+          onChange={(e) => setMinMileage(e.target.value)}
+        />
+        <input
+          type="text"
+          placeholder="Макс. пробег"
+          value={maxMileage}
+          onChange={(e) => setMaxMileage(e.target.value)}
+        />
+        <button type="submit" disabled={loading}>
+          Применить
+        </button>
+        <button type="button" onClick={clearFilters} disabled={loading}>
+          Сбросить
+        </button>
+      </form>
+
+      {/* Сетка автомобилей */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fill,minmax(300px,1fr))",
+          gap: "20px",
+        }}
+      >
         {vehicles.map((v) => (
-          <VehicleCard key={v.id} v={v} isFavorite={favorites.includes(v.id)} />
+          <div key={v.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
+            <VehicleCard v={v} />
+            <button onClick={() => router.push(`/catalog/${v.id}`)}>
+              Read More
+            </button>
+            <button
+              onClick={() =>
+                favorites.includes(v.id)
+                  ? removeFavorite(v.id)
+                  : addFavorite(v.id)
+              }
+            >
+              {favorites.includes(v.id)
+                ? "Убрать из избранного"
+                : "Добавить в избранное"}
+            </button>
+          </div>
         ))}
-      </section>
+      </div>
 
-      {!loading && vehicles.length > 0 && (
-        <button className={css.loadMoreBtn} onClick={handleLoadMore}>
-          Load More
+      {/* Load More */}
+      {page < totalPages && (
+        <button
+          onClick={handleLoadMore}
+          disabled={loading}
+          style={{ marginTop: "20px" }}
+        >
+          {loading ? "Загрузка..." : "Load More"}
         </button>
       )}
-
-      {loading && <p className={css.loading}>Loading...</p>}
-    </main>
+    </div>
   );
 }
