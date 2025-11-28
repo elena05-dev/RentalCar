@@ -1,4 +1,3 @@
-// components/CatalogClient/CatalogClient.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,10 +5,9 @@ import axios from "axios";
 import { Vehicle, useStore } from "../../store/useStore";
 import VehicleCard from "../VehicleCard/VehicleCard";
 import { useRouter } from "next/navigation";
+import css from "./CatalogClient.module.css";
 
-interface CatalogClientProps {
-  initialVehicles: Vehicle[];
-}
+import Dropdown from "../Dropdown/Dropdown";
 
 interface VehicleQueryParams {
   page: number;
@@ -27,42 +25,53 @@ interface CarsResponse {
   totalPages: number;
 }
 
+interface CatalogClientProps {
+  initialVehicles: Vehicle[];
+}
+
 export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
   const router = useRouter();
+
   const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles);
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
-  const [loading, setLoading] = useState(false);
-  const [brandFilter, setBrandFilter] = useState("");
-  const [priceFilter, setPriceFilter] = useState("");
-  const [minMileage, setMinMileage] = useState("");
-  const [maxMileage, setMaxMileage] = useState("");
+  const [page, setPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const { favorites, addFavorite, removeFavorite } = useStore((s) => ({
-    favorites: s.favorites,
-    addFavorite: s.addFavorite,
-    removeFavorite: s.removeFavorite,
-  }));
+  // Фильтры
+  const [brandFilter, setBrandFilter] = useState<string>("");
+  const [priceFilter, setPriceFilter] = useState<string>("");
+  const [minMileage, setMinMileage] = useState<string>("");
+  const [maxMileage, setMaxMileage] = useState<string>("");
 
-  // Функция для fetch с backend с фильтрами и пагинацией
-  const fetchVehicles = async (pageNum = 1) => {
+  // Zustand store
+  const favorites = useStore((s) => s.favorites);
+  const addFavorite = useStore((s) => s.addFavorite);
+  const removeFavorite = useStore((s) => s.removeFavorite);
+
+  // Fetch с backend + фильтры
+  const fetchVehicles = async (pageNum: number = 1) => {
     setLoading(true);
     try {
       const params: VehicleQueryParams = { page: pageNum, limit: 10 };
+
       if (brandFilter) params.brand = brandFilter;
       if (priceFilter) params.rentalPrice = priceFilter;
       if (minMileage) params.minMileage = minMileage;
       if (maxMileage) params.maxMileage = maxMileage;
 
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/cars`, {
-        params,
-      });
+      const res = await axios.get<CarsResponse>(
+        "https://car-rental-api.goit.global/cars",
+        {
+          params,
+        }
+      );
 
       if (pageNum === 1) {
         setVehicles(res.data.cars);
       } else {
         setVehicles((prev) => [...prev, ...res.data.cars]);
       }
+
       setPage(res.data.page);
       setTotalPages(res.data.totalPages);
     } catch (err) {
@@ -73,19 +82,14 @@ export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
     }
   };
 
-  // Применяем фильтры
+  // Применить фильтры
   const handleFilterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     fetchVehicles(1);
   };
 
-  // Load More
-  const handleLoadMore = () => {
-    fetchVehicles(page + 1);
-  };
-
-  // Чистка фильтров
-  const clearFilters = () => {
+  // Сброс фильтров
+  const handleReset = () => {
     setBrandFilter("");
     setPriceFilter("");
     setMinMileage("");
@@ -93,45 +97,61 @@ export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
     fetchVehicles(1);
   };
 
-  return (
-    <div>
-      <h2>Каталог автомобилей</h2>
+  const brands = ["BMW", "Audi", "Mercedes", "Toyota", "Honda"];
 
+  // Load More
+  const handleLoadMore = () => fetchVehicles(page + 1);
+
+  return (
+    <div className={css.container}>
       {/* Фильтры */}
-      <form onSubmit={handleFilterSubmit} style={{ marginBottom: "20px" }}>
-        <input
-          type="text"
-          placeholder="Бренд"
-          value={brandFilter}
-          onChange={(e) => setBrandFilter(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Цена"
-          value={priceFilter}
-          onChange={(e) => setPriceFilter(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Мин. пробег"
-          value={minMileage}
-          onChange={(e) => setMinMileage(e.target.value)}
-        />
-        <input
-          type="text"
-          placeholder="Макс. пробег"
-          value={maxMileage}
-          onChange={(e) => setMaxMileage(e.target.value)}
-        />
+      <form className={css.form} onSubmit={handleFilterSubmit}>
+        <div className={css.formField}>
+          <label className={css.text}>Car brand</label>
+          <div className={css.item}>
+            <Dropdown
+              label="Choose a brand"
+              options={brands}
+              selected={brandFilter}
+              onChange={setBrandFilter}
+            />
+          </div>
+        </div>
+
+        <div className={css.formField}>
+          <label className={css.text}>Price/ 1 hour</label>
+          <input
+            className={css.item}
+            type="text"
+            placeholder="Choose a price"
+            value={priceFilter}
+            onChange={(e) => setPriceFilter(e.target.value)}
+          />
+        </div>
+        <div className={css.formField}>
+          <label className={css.text}>Car mileage / km</label>
+          <div className={css.rangeInputs}>
+            <input
+              className={css.itemMileage}
+              type="text"
+              placeholder="From"
+              value={minMileage}
+              onChange={(e) => setMinMileage(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="To"
+              value={maxMileage}
+              onChange={(e) => setMaxMileage(e.target.value)}
+            />
+          </div>
+        </div>
         <button type="submit" disabled={loading}>
-          Применить
-        </button>
-        <button type="button" onClick={clearFilters} disabled={loading}>
-          Сбросить
+          Search
         </button>
       </form>
 
-      {/* Сетка автомобилей */}
+      {/* ======= КАТАЛОГ МАШИН ======= */}
       <div
         style={{
           display: "grid",
@@ -141,7 +161,7 @@ export default function CatalogClient({ initialVehicles }: CatalogClientProps) {
       >
         {vehicles.map((v) => (
           <div key={v.id} style={{ border: "1px solid #ccc", padding: "10px" }}>
-            <VehicleCard v={v} />
+            <VehicleCard vehicle={v} />
             <button onClick={() => router.push(`/catalog/${v.id}`)}>
               Read More
             </button>

@@ -4,14 +4,43 @@
     padding: 0 16px;
 }
 
-.title {
+.container {
+    margin: 0 auto;
+}
+
+.form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 16px;
+}
+
+.formField {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.rangeInputs {
+    display: flex;
+}
+
+.text {
     font-family: "Manrope", sans-serif;
-    font-weight: 700;
-    font-size: 48px;
-    line-height: 1.2;
-    text-align: center;
-    margin: 40px 0;
-    color: #222;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
+    color: #8d929a;
+}
+
+.item {
+    border-radius: 12px;
+    padding: 12px 16px;
+    width: 204px;
+    height: 44px;
+    background: #f7f7f7;
+    border: none;
 }
 
 .grid {

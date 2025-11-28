@@ -2,10 +2,10 @@ import Image from "next/image";
 import { Vehicle } from "../../store/useStore";
 
 interface VehicleCardProps {
-  v: Vehicle;
+  vehicle: Vehicle;
 }
 
-export default function VehicleCard({ v }: VehicleCardProps) {
+export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const formatMileage = (mileage: number) =>
     mileage.toLocaleString("ru-RU") + " km";
 
@@ -14,19 +14,19 @@ export default function VehicleCard({ v }: VehicleCardProps) {
       style={{ border: "1px solid #ccc", padding: "10px", borderRadius: "8px" }}
     >
       <Image
-        src={v.img}
-        alt={`${v.brand} ${v.model}`}
-        width={400} // можно подбирать под макет
-        height={250} // пропорционально
+        src={vehicle.img}
+        alt={`${vehicle.brand} ${vehicle.model}`}
+        width={400}
+        height={250}
         style={{ borderRadius: "8px" }}
-        priority={true} // если важно для LCP
+        priority={true}
       />
       <h3>
-        {v.brand} {v.model} ({v.year})
+        {vehicle.brand} {vehicle.model} ({vehicle.year})
       </h3>
-      <p>{v.description}</p>
-      <p>Цена: ${v.rentalPrice}/день</p>
-      <p>Пробег: {formatMileage(v.mileage)}</p>
+      <p>{vehicle.description}</p>
+      <p>Цена: ${vehicle.rentalPrice}/день</p>
+      <p>Пробег: {formatMileage(vehicle.mileage)}</p>
     </div>
   );
 }
