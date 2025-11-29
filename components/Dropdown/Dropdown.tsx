@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import css from "./Dropdown.module.css";
 
@@ -8,6 +8,7 @@ interface DropdownProps {
   options: string[];
   selected: string;
   onChange: (value: string) => void;
+  size?: "small" | "large";
 }
 
 export default function Dropdown({
@@ -15,6 +16,7 @@ export default function Dropdown({
   options,
   selected,
   onChange,
+  size,
 }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -33,8 +35,10 @@ export default function Dropdown({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const sizeClass = size ? css[size] ?? "" : "";
+
   return (
-    <div className={css.dropdown} ref={dropdownRef}>
+    <div className={`${css.dropdown} ${sizeClass}`} ref={dropdownRef}>
       <label className={css.label}>{label}</label>
       <div className={css.selected} onClick={() => setIsOpen(!isOpen)}>
         <Image src="/chevron-down.svg" alt="arrow" width={16} height={16} />

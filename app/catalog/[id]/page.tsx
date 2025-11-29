@@ -9,7 +9,7 @@ import VehicleDetailsClient from "./VehicleDetailsClient";
 import { getVehicleById, Vehicle } from "../../../lib/api";
 
 type PageProps = {
-  params: Promise<{ id: string }>; // params приходит как Promise
+  params: Promise<{ id: string }>; 
 };
 
 export async function generateMetadata({

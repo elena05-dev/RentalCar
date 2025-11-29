@@ -1,29 +1,96 @@
 .main {
     max-width: 1440px;
     margin: 0 auto;
-    padding: 0 16px;
+
 }
 
 .container {
+    max-width: 1440px;
+    width: 100%;
     margin: 0 auto;
+    padding: 0 min(120px, 5%);
+    box-sizing: border-box;
+
 }
 
 .form {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: end;
     gap: 16px;
+    padding-top: 84px;
 }
 
 .formField {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
+
+
 }
 
 .rangeInputs {
     display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.inputsRow {
+    display: flex;
+}
+
+.inputWrapper {
+    position: relative;
+    display: flex;
+
+}
+
+.prefix {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #101828;
+    pointer-events: none;
+}
+
+
+.minMileage {
+    border-right: 1px solid #dadde1;
+    border-radius: 12px 0 0 12px;
+    width: 160px;
+    height: 44px;
+    padding-left: 60px;
+    background: #f7f7f7;
+    border: none;
+}
+
+.minMileage:focus {
+    outline: none;
+    border: 1px solid #999;
+    /* кастомная рамка */
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+    /* мягкая подсветка */
+}
+
+.maxMileage {
+    border-radius: 0 12px 12px 0;
+    width: 160px;
+    height: 44px;
+    background: #f7f7f7;
+    border: none;
+    padding-left: 50px;
+}
+
+.maxMileage:focus {
+    outline: none;
+    border: 1px solid #999;
+    /* кастомная рамка */
+    box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+    /* мягкая подсветка */
 }
 
 .text {
@@ -36,41 +103,93 @@
 
 .item {
     border-radius: 12px;
-    padding: 12px 16px;
+
     width: 204px;
     height: 44px;
     background: #f7f7f7;
     border: none;
 }
 
-.grid {
+
+
+.cardsCatalog {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 56px min(16px, 5%) 80px min(16px, 5%);
+    gap: 80px;
+}
+
+.cardsBox {
+
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 32px;
+}
+
+/* Обёртка одной карточки + кнопки */
+
+.buttonSeach {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 0px;
+    border-radius: 12px;
+    border: none;
+    padding: 12px 51px;
+    width: 156px;
+    height: 44px;
+    background: #3470ff;
+    color: #fff;
+    cursor: pointer;
+    transition: transform 0.1s ease, box-shadow 0.1s ease;
+    font-family: "Manrope", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    margin-top: 24px;
+}
+
+.buttonSeach:hover {
+    background: #0b44cd;
+}
+
+.buttonSeach:active {
+    transform: scale(0.98);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .loadMoreBtn {
     display: block;
-    margin: 0 auto 60px auto;
-    padding: 12px 32px;
-    background-color: #3470ff;
-    color: #fff;
-    font-size: 18px;
-    font-weight: 600;
-    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    gap: 0px;
+    border: 1px solid #3470ff;
     border-radius: 12px;
+    width: 156px;
+    height: 44px;
     cursor: pointer;
     transition: background-color 0.3s;
+    background: transparent;
+    font-family: "Manrope",
+        sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+    color: #101828;
 }
 
 .loadMoreBtn:hover {
-    background-color: #2453c4;
+    border: 1px solid #0b44cd;
 }
 
-.loading {
+.noResults {
     text-align: center;
     font-size: 18px;
     color: #555;
-    margin-bottom: 32px;
+    padding: 40px 0;
 }
