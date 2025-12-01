@@ -1,15 +1,5 @@
-// lib/api.ts
 import axios from "axios";
-
-export interface Vehicle {
-  id: string;
-  brand: string;
-  model: string;
-  rentalPrice: number;
-  mileage: number;
-  description: string;
-  img: string;
-}
+import { Vehicle } from "../store/useStore";
 
 interface VehicleFilters {
   brand?: string;

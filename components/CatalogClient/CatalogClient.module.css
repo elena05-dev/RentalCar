@@ -71,9 +71,7 @@
 .minMileage:focus {
     outline: none;
     border: 1px solid #999;
-    /* кастомная рамка */
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
-    /* мягкая подсветка */
 }
 
 .maxMileage {
@@ -88,9 +86,7 @@
 .maxMileage:focus {
     outline: none;
     border: 1px solid #999;
-    /* кастомная рамка */
     box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
-    /* мягкая подсветка */
 }
 
 .text {
@@ -103,14 +99,11 @@
 
 .item {
     border-radius: 12px;
-
     width: 204px;
     height: 44px;
     background: #f7f7f7;
     border: none;
 }
-
-
 
 .cardsCatalog {
     width: 100%;
@@ -128,7 +121,6 @@
     gap: 32px;
 }
 
-/* Обёртка одной карточки + кнопки */
 
 .buttonSeach {
     display: flex;

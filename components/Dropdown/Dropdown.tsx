@@ -21,7 +21,6 @@ export default function Dropdown({
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Закрытие списка при клике вне компонента
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (

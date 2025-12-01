@@ -1,4 +1,3 @@
-// app/catalog/layout.tsx
 import Header from "../../components/Header/Header";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";

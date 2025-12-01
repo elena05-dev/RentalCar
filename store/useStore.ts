@@ -30,13 +30,13 @@ type Filters = {
 
 type State = {
   vehicles: Vehicle[];
-  favorites: string[]; // массив id
+  favorites: string[];
   filters: Filters;
   setVehicles: (v: Vehicle[]) => void;
   clearVehicles: () => void;
   addFavorite: (id: string) => void;
   removeFavorite: (id: string) => void;
-  toggleFavorite: (id: string) => void; // добавляем toggle
+  toggleFavorite: (id: string) => void;
   setFilters: (f: Partial<Filters>) => void;
 };
 

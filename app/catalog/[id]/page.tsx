@@ -1,4 +1,3 @@
-// app/catalog/[id]/page.tsx
 import { Metadata } from "next";
 import {
   QueryClient,
@@ -6,10 +5,11 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 import VehicleDetailsClient from "./VehicleDetailsClient";
-import { getVehicleById, Vehicle } from "../../../lib/api";
+import { getVehicleById } from "../../../lib/api";
+import { Vehicle } from "../../../types/vehicle";
 
 type PageProps = {
-  params: Promise<{ id: string }>; 
+  params: Promise<{ id: string }>;
 };
 
 export async function generateMetadata({
@@ -18,7 +18,7 @@ export async function generateMetadata({
   const { id } = await params;
   const vehicle: Vehicle | null = await getVehicleById(id);
 
-  if (!vehicle) return { title: "Машина не найдена" };
+  if (!vehicle) return { title: "The car was not found" };
 
   return {
     title: `RentalCar: ${vehicle.brand} ${vehicle.model}`,
@@ -45,7 +45,6 @@ export default async function VehiclePage({ params }: PageProps) {
 
   const queryClient = new QueryClient();
 
-  // Prefetch vehicle для TanStack Query
   await queryClient.prefetchQuery({
     queryKey: ["vehicle", id],
     queryFn: () => getVehicleById(id),
@@ -54,7 +53,7 @@ export default async function VehiclePage({ params }: PageProps) {
   const vehicle: Vehicle | null =
     queryClient.getQueryData(["vehicle", id]) || null;
 
-  if (!vehicle) return <p>Машина не найдена</p>;
+  if (!vehicle) return <p>The car was not found</p>;
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>

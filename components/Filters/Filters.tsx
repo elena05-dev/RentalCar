@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useStore, Vehicle } from "../../store/useStore";
+import { useStore } from "../../store/useStore";
 
 export default function Filters() {
   const setFilters = useStore((s) => s.setFilters);
