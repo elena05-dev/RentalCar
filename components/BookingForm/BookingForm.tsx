@@ -2,18 +2,16 @@
 
 import { useState, useEffect } from "react";
 import css from "./BookingForm.module.css";
-
-type IziToastType = typeof import("izitoast");
+import type { IziToast } from "izitoast";
 
 export default function BookingForm() {
-  const [iziToast, setIziToast] = useState<IziToastType | null>(null);
+  const [iziToast, setIziToast] = useState<IziToast | null>(null);
 
   useEffect(() => {
     let mounted = true;
 
     const loadIzi = async () => {
-      const mod = await import("izitoast");
-      await import("izitoast/dist/css/izitoast.min.css");
+      const mod = (await import("izitoast")).default;
       if (mounted) setIziToast(mod);
     };
 
@@ -36,7 +34,7 @@ export default function BookingForm() {
         .value,
     };
 
-    iziToast?.default?.success({
+    iziToast?.success({
       title: "Success!",
       message: `Car has been successfully booked for ${data.date}.`,
       position: "topRight",

@@ -1,4 +1,5 @@
 import "./globals.css";
+import "izitoast/dist/css/iziToast.min.css";
 import { Inter } from "next/font/google";
 import TanStackProvider from "../components/TanStackProvider";
 
