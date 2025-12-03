@@ -229,13 +229,13 @@ export default function CatalogClient({
 
         {vehicles.length > 0 && (
           <>
-            <div className={css.cardsBox}>
+            <ul className={css.cardsBox}>
               {vehicles.map((v) => (
-                <div key={v.id}>
+                <li key={v.id} className={css.cardItem}>
                   <VehicleCard vehicle={v} />
-                </div>
+                </li>
               ))}
-            </div>
+            </ul>
 
             {/* Load More */}
             {page < totalPages && (

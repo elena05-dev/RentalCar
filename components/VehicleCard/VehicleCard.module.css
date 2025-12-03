@@ -35,6 +35,11 @@
 .price {
     flex-shrink: 0;
     margin-left: 12px;
+    font-family: "Manrope", sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 32px;
+    color: #3470ff;
 }
 
 .location {
@@ -118,6 +123,7 @@
     position: relative;
     width: 100%;
     overflow: hidden;
+    border-radius: 14px;
 }
 
 .favoriteIcon {

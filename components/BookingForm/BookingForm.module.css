@@ -12,6 +12,7 @@
     width: 640px;
     height: 488px;
     background: #fff;
+
 }
 
 .formTitle {
@@ -37,6 +38,7 @@
     width: 576px;
     height: 48px;
     background: #f7f7f7;
+    outline: none;
 }
 
 .textarea {
@@ -46,6 +48,9 @@
     width: 576px;
     height: 88px;
     background: #f7f7f7;
+    resize: none;
+    overflow: hidden;
+    outline: none;
 }
 
 .button {
@@ -72,4 +77,125 @@
 
 .button:active {
     transform: translateY(2px) scale(0.95);
+}
+
+.dateFieldWrapper {
+    position: relative;
+    border-radius: 12px;
+    padding: 12px 20px;
+    width: 576px;
+    height: 48px;
+    background: #f7f7f7;
+}
+
+.dateField {
+
+    cursor: pointer;
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d929a;
+
+}
+
+.placeholder {
+    color: #999;
+}
+
+.calendarDropdown {
+    position: absolute;
+    top: 110%;
+    left: 0;
+    width: 276px;
+    height: 284px;
+    padding: 12px;
+    background: #fff;
+    border: 1px solid #3470ff;
+    border-radius: 12px;
+    z-index: 50;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.08);
+}
+
+.calendarHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+}
+
+.data {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    text-align: center;
+    color: #101828;
+}
+
+.weekDays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: bold;
+    padding-top: 12px;
+    margin-bottom: 12px;
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 12px;
+    line-height: 14px;
+    text-align: center;
+    color: #8d929a;
+}
+
+.calendarHeader button {
+    background: none;
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    color: #3470ff;
+}
+
+.calendarHeader button:hover {
+    color: #0b44cd;
+}
+
+.calendarDivider {
+    border: none;
+    border-top: 1px solid #3470ff;
+    width: 100%;
+}
+
+.daysGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    padding-top: 12px;
+}
+
+.day,
+.emptyDay {
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+    text-align: center;
+    border-radius: 100%;
+    cursor: pointer;
+}
+
+.day:hover {
+    background-color: #eee;
+}
+
+.startDay,
+.endDay {
+    background-color: #3470ff;
+    color: #fff;
+}
+
+.inRange {
+    background-color: #cfe3ff;
 }

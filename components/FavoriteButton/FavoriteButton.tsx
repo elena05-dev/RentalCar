@@ -32,7 +32,7 @@ export default function FavoriteButton({
         src={isFavorite ? "/VectorActive.svg" : "/Vector.svg"}
         alt="favorite"
         width={16}
-        height={15}
+        height={16}
       />
     </button>
   );
