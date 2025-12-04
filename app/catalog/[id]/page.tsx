@@ -7,6 +7,7 @@ import {
 import VehicleDetailsClient from "./VehicleDetailsClient";
 import { getVehicleById } from "../../../lib/api";
 import { Vehicle } from "../../../types/vehicle";
+import { notFound } from "next/navigation";
 
 type PageProps = {
   params: Promise<{ id: string }>;
@@ -26,7 +27,7 @@ export async function generateMetadata({
     openGraph: {
       title: `RentalCar: ${vehicle.brand} ${vehicle.model}`,
       description: vehicle.description.slice(0, 160),
-      url: `https://your-site.vercel.app/catalog/${id}`,
+      url: `https://rental-car-dun-kappa.vercel.app/catalog/${id}`,
       images: [
         {
           url: vehicle.img,
@@ -53,8 +54,9 @@ export default async function VehiclePage({ params }: PageProps) {
   const vehicle: Vehicle | null =
     queryClient.getQueryData(["vehicle", id]) || null;
 
-  if (!vehicle) return <p>The car was not found</p>;
-
+  if (!vehicle) {
+    notFound();
+  }
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
       <VehicleDetailsClient vehicle={vehicle} />

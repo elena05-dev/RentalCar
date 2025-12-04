@@ -189,3 +189,16 @@
     color: #555;
     padding: 40px 0;
 }
+
+.loaderWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50vh;
+
+}
+
+.loader {
+    font-size: 1.5rem;
+    font-weight: bold;
+}

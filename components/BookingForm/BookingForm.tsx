@@ -14,6 +14,12 @@ export default function BookingForm() {
 
   const [currentMonth, setCurrentMonth] = useState<Date | null>(null);
 
+  const today = useMemo(() => {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return t;
+  }, []);
+
   useEffect(() => {
     setCurrentMonth(new Date());
 
@@ -42,6 +48,7 @@ export default function BookingForm() {
   }, [startDate, endDate]);
 
   const handleSelectDate = (date: Date) => {
+    if (date < today) return;
     if (!startDate || (startDate && endDate)) {
       setStartDate(date);
       setEndDate(null);
@@ -188,7 +195,9 @@ export default function BookingForm() {
                       d.toDateString() === endDate?.toDateString()
                         ? css.endDay
                         : ""
-                    } ${isInRange(d) ? css.inRange : ""}`}
+                    } ${isInRange(d) ? css.inRange : ""}${
+                      d < today ? css.disabledDay : ""
+                    }`}
                     onClick={() => handleSelectDate(d)}
                   >
                     {d.getDate()}

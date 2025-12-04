@@ -21,25 +21,24 @@ export async function fetchVehicles(
       limit,
       ...filters,
     };
+
     const { data } = await axios.get<{
       cars: Vehicle[];
       page: number;
       totalPages: number;
     }>(`${BASE_URL}/cars`, { params });
+
     return data;
-  } catch (err: unknown) {
-    if (err instanceof Error) throw new Error(err.message);
+  } catch {
     throw new Error("Failed to fetch vehicles");
   }
 }
 
 export async function getVehicleById(id: string): Promise<Vehicle | null> {
   try {
-    const res = await fetchVehicles();
-    const cars = res.cars;
-    return cars.find((v) => v.id === id) || null;
-  } catch (err: unknown) {
-    if (err instanceof Error) throw new Error(err.message);
+    const { data } = await axios.get<Vehicle>(`${BASE_URL}/cars/${id}`);
+    return data;
+  } catch {
     return null;
   }
 }

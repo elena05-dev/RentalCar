@@ -12,12 +12,10 @@ export default function FavoriteButton({
   className,
 }: FavoriteButtonProps) {
   const isFavorite = useStore((s) => s.favorites.includes(vehicleId));
-  const addFavorite = useStore((s) => s.addFavorite);
-  const removeFavorite = useStore((s) => s.removeFavorite);
+  const toggleFavorite = useStore((s) => s.toggleFavorite);
 
   const handleClick = () => {
-    if (isFavorite) removeFavorite(vehicleId);
-    else addFavorite(vehicleId);
+    toggleFavorite(vehicleId);
   };
 
   return (

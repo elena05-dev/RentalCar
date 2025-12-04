@@ -12,7 +12,7 @@ export default function VehicleCard({ vehicle }: VehicleCardProps) {
   const router = useRouter();
 
   const formatMileage = (mileage: number) =>
-    mileage.toLocaleString("ru-RU") + " km";
+    mileage.toLocaleString("en-US") + " km";
 
   const parts = vehicle.address.split(",").map((v) => v.trim());
   const city = parts[parts.length - 2];

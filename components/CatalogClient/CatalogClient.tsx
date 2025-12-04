@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 import { Vehicle } from "../../store/useStore";
 import VehicleCard from "../VehicleCard/VehicleCard";
@@ -34,10 +34,11 @@ export default function CatalogClient({
 }: CatalogClientProps) {
   const VEHICLES_PER_PAGE = 12;
 
-  const [vehicles, setVehicles] = useState<Vehicle[]>([]);
+  const [vehicles, setVehicles] = useState<Vehicle[]>(initialVehicles || []);
   const [page, setPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 1);
   const [loading, setLoading] = useState<boolean>(false);
+  const [hasFetched, setHasFetched] = useState<boolean>(false);
 
   const [brandFilter, setBrandFilter] = useState<string>("");
   const [priceFilter, setPriceFilter] = useState<string>("");
@@ -60,17 +61,23 @@ export default function CatalogClient({
     fetchBrands();
   }, []);
 
-  useEffect(() => {
+  // === Reset Filters ===
+  const handleResetFilters = useCallback(() => {
+    setBrandFilter("");
+    setPriceFilter("");
+    setMinMileage("");
+    setMaxMileage("");
+    setPage(1);
     setVehicles(initialVehicles);
   }, [initialVehicles]);
 
-  const [hasFetched, setHasFetched] = useState(false);
+  useEffect(() => {
+    handleResetFilters();
+  }, [handleResetFilters]);
 
-  // Fetch с backend
-
+  // =================== Fetch vehicles ===================
   const fetchVehicles = async (pageNum: number = 1) => {
     setLoading(true);
-    setHasFetched(false);
 
     const minLoaderTime = 300;
     const startTime = Date.now();
@@ -90,30 +97,28 @@ export default function CatalogClient({
         "https://car-rental-api.goit.global/cars",
         { params }
       );
-
+      console.log(res.data);
       if (pageNum === 1) {
         setVehicles(res.data.cars);
       } else {
         setVehicles((prev) => [...prev, ...res.data.cars]);
       }
 
-      setPage(res.data.page);
+      setPage(pageNum);
       setTotalPages(res.data.totalPages);
+      setHasFetched(true);
     } catch (err) {
       console.error(err);
       alert("Error loading vehicles");
     } finally {
       const elapsed = Date.now() - startTime;
       const remaining = minLoaderTime - elapsed;
-      if (remaining > 0) {
-        setTimeout(() => {
+      setTimeout(
+        () => {
           setLoading(false);
-          setHasFetched(true);
-        }, remaining);
-      } else {
-        setLoading(false);
-        setHasFetched(true);
-      }
+        },
+        remaining > 0 ? remaining : 0
+      );
     }
   };
 
@@ -123,6 +128,7 @@ export default function CatalogClient({
     }
   };
 
+  // =================== Filters handlers ===================
   const handleMinMileageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const raw = e.target.value.replace(/,/g, "");
     if (/^\d*$/.test(raw)) setMinMileage(raw);
@@ -133,23 +139,20 @@ export default function CatalogClient({
     if (/^\d*$/.test(raw)) setMaxMileage(raw);
   };
 
-  const handleResetFilters = () => {
-    setBrandFilter("");
-    setPriceFilter("");
-    setMinMileage("");
-    setMaxMileage("");
-    setVehicles([]);
-    setPage(1);
-  };
-
   const handleFilterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleResetFilters();
     fetchVehicles(1);
-    setVehicles([]);
   };
 
   const price = ["30", "40", "50", "60", "70", "80", "90", "100", "110", "120"];
+
+  if (loading && vehicles.length === 0) {
+    return (
+      <div className={css.loaderWrapper}>
+        <div className={css.loader}>Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className={css.container}>

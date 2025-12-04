@@ -44,7 +44,7 @@ export default function VehicleDetailsClient({
               <span>{vehicle.address.split(", ").slice(-2).join(", ")}</span>
               <p className={css.infoLine}>
                 <span className={css.label}>Mileage:</span>{" "}
-                {vehicle.mileage.toLocaleString()} km
+                {vehicle.mileage.toLocaleString("en-US")} km
               </p>
             </div>
             <p className={css.price}>${vehicle.rentalPrice}</p>

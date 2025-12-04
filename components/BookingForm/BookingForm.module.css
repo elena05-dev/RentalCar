@@ -39,6 +39,11 @@
     height: 48px;
     background: #f7f7f7;
     outline: none;
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d929a;
 }
 
 .textarea {
@@ -51,6 +56,11 @@
     resize: none;
     overflow: hidden;
     outline: none;
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d929a;
 }
 
 .button {
@@ -100,7 +110,11 @@
 }
 
 .placeholder {
-    color: #999;
+    font-family: "Manrope", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    color: #8d929a;
 }
 
 .calendarDropdown {
@@ -198,4 +212,9 @@
 
 .inRange {
     background-color: #cfe3ff;
+}
+
+.disabledDay {
+    color: #ccc;
+    cursor: not-allowed;
 }
