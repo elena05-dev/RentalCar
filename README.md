@@ -24,9 +24,8 @@ iziToast – User notifications for booking and interactions
 next/image – Optimized image rendering for faster load times
 
 🚀 Getting Started
-git clone https://github.com/yourusername/rentalcar.git
-npm install
-npm run dev
+git clone https://github.com/elena05-dev/RentalCar.git
+
 Open http://localhost:3000
 in your browser.
 
